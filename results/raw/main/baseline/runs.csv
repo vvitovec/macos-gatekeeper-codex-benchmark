@@ -1,0 +1,16 @@
+label,start_epoch,end_epoch,total,concurrency,failures,status,target_kind,workload
+real_clean_rep1,1783227492.542173000,1783227492.942333000,20,5,0,ok,real-codex,codex-help
+copy_clean_rep1,1783227492.984860000,1783227495.463998000,20,5,0,ok,single-copy-clean,codex-help
+copy_quarantined_rep1,1783227495.507466000,1783227497.409641000,20,5,0,ok,single-copy-quarantined,codex-help
+project_clean_rep1,1783227497.453588000,1783227529.528499000,20,5,0,ok,project-copies-clean,project-codex-help
+project_quarantined_rep1,1783227529.586503000,1783227561.663133000,20,5,0,ok,project-copies-quarantined,project-codex-help
+real_clean_rep2,1783227561.721380000,1783227561.968222000,20,5,0,ok,real-codex,codex-help
+copy_clean_rep2,1783227562.014590000,1783227562.279343000,20,5,0,ok,single-copy-clean,codex-help
+copy_quarantined_rep2,1783227562.327258000,1783227562.589033000,20,5,0,ok,single-copy-quarantined,codex-help
+project_clean_rep2,1783227562.636234000,1783227563.187098000,20,5,0,ok,project-copies-clean,project-codex-help
+project_quarantined_rep2,1783227563.233025000,1783227566.238010000,20,5,0,ok,project-copies-quarantined,project-codex-help
+real_clean_rep3,1783227566.285635000,1783227566.432530000,20,5,0,ok,real-codex,codex-help
+copy_clean_rep3,1783227566.477404000,1783227566.622826000,20,5,0,ok,single-copy-clean,codex-help
+copy_quarantined_rep3,1783227566.670701000,1783227566.816486000,20,5,0,ok,single-copy-quarantined,codex-help
+project_clean_rep3,1783227566.860917000,1783227567.011756000,20,5,0,ok,project-copies-clean,project-codex-help
+project_quarantined_rep3,1783227567.055970000,1783227567.215270000,20,5,0,ok,project-copies-quarantined,project-codex-help

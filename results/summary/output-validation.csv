@@ -1,0 +1,7 @@
+condition,reps,total_per_rep,expected_stdout_lines_per_rep,observed_stdout_lines_per_rep,interpretation
+tiny_same_clean,5,100,100,100,completed
+tiny_same_quarantined,5,100,100,0,timeout_limited_no_successful_outputs
+tiny_many_clean,5,100,100,100,completed
+tiny_many_quarantined,5,100,100,0,timeout_limited_no_successful_outputs
+real_codex_clean_path,3,100,13300,13300,completed
+real_codex_temp_quarantined_path,3,100,13300,13300,completed
