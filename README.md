@@ -58,7 +58,7 @@ The scripts are macOS-oriented and assume:
 
 - `zsh`
 - `xattr`
-- `timeout` from Homebrew coreutils
+- GNU `timeout` from Homebrew coreutils (`timeout` or `gtimeout`; override with `TIMEOUT_BIN`)
 - `clang` for the tiny executable benchmark
 - Codex CLI on `PATH`
 
