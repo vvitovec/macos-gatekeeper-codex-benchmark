@@ -14,6 +14,12 @@ CONCURRENCY=${CONCURRENCY:-10}
 REPS=${REPS:-5}
 CMD_TIMEOUT=${CMD_TIMEOUT:-5}
 MANY_COUNT=${MANY_COUNT:-50}
+TIMEOUT_BIN="${TIMEOUT_BIN:-$(command -v timeout 2>/dev/null || command -v gtimeout 2>/dev/null || true)}"
+
+if [ -z "$TIMEOUT_BIN" ]; then
+  print -u2 "error: GNU timeout not found; install Homebrew coreutils or set TIMEOUT_BIN"
+  exit 1
+fi
 
 real_codex() {
   local real dir target
@@ -66,9 +72,9 @@ run_binary_burst() {
   for i in $(seq 1 "$TOTAL"); do
     (
       if [ -n "$arg" ]; then
-        timeout "$CMD_TIMEOUT" "$binary" "$arg" >> "$stdout_file" 2>> "$fail_file"
+        "$TIMEOUT_BIN" "$CMD_TIMEOUT" "$binary" "$arg" >> "$stdout_file" 2>> "$fail_file"
       else
-        timeout "$CMD_TIMEOUT" "$binary" >> "$stdout_file" 2>> "$fail_file"
+        "$TIMEOUT_BIN" "$CMD_TIMEOUT" "$binary" >> "$stdout_file" 2>> "$fail_file"
       fi
     ) &
     pids+=($!)
@@ -106,7 +112,7 @@ run_many_burst() {
   for i in $(seq 1 "$TOTAL"); do
     n=$(( ((i - 1) % MANY_COUNT) + 1 ))
     (
-      timeout "$CMD_TIMEOUT" "$dir/tiny-runner-$n" >> "$stdout_file" 2>> "$fail_file"
+      "$TIMEOUT_BIN" "$CMD_TIMEOUT" "$dir/tiny-runner-$n" >> "$stdout_file" 2>> "$fail_file"
     ) &
     pids+=($!)
     running=$((running + 1))
@@ -183,6 +189,7 @@ trap cleanup_real_codex EXIT INT TERM
 {
   printf 'timestamp=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   printf 'total=%s\nconcurrency=%s\nreps=%s\ncmd_timeout=%s\nmany_count=%s\n' "$TOTAL" "$CONCURRENCY" "$REPS" "$CMD_TIMEOUT" "$MANY_COUNT"
+  printf 'timeout_bin=%s\n' "$TIMEOUT_BIN"
   printf 'real_codex=%s\n' "$REAL_CODEX"
   printf 'real_codex_initial_quarantine='
   xattr -p com.apple.quarantine "$REAL_CODEX" 2>/dev/null || printf 'absent'

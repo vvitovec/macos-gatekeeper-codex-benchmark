@@ -16,6 +16,12 @@ TOTAL=${TOTAL:-60}
 CONCURRENCY=${CONCURRENCY:-10}
 REPS=${REPS:-3}
 CMD_TIMEOUT=${CMD_TIMEOUT:-8}
+TIMEOUT_BIN="${TIMEOUT_BIN:-$(command -v timeout 2>/dev/null || command -v gtimeout 2>/dev/null || true)}"
+
+if [ -z "$TIMEOUT_BIN" ]; then
+  print -u2 "error: GNU timeout not found; install Homebrew coreutils or set TIMEOUT_BIN"
+  exit 1
+fi
 
 real_codex() {
   local real dir target
@@ -68,7 +74,7 @@ run_binary_burst() {
 
   for i in $(seq 1 "$TOTAL"); do
     (
-      timeout "$CMD_TIMEOUT" "$binary" help >> "$stdout_file" 2>> "$fail_file"
+      "$TIMEOUT_BIN" "$CMD_TIMEOUT" "$binary" help >> "$stdout_file" 2>> "$fail_file"
     ) &
     pids+=($!)
     running=$((running + 1))
@@ -107,7 +113,7 @@ run_project_burst() {
   for i in $(seq 1 "$TOTAL"); do
     n=$(( (i % 20) + 1 ))
     (
-      timeout "$CMD_TIMEOUT" "$project/bin/codex-$n" help >> "$stdout_file" 2>> "$fail_file"
+      "$TIMEOUT_BIN" "$CMD_TIMEOUT" "$project/bin/codex-$n" help >> "$stdout_file" 2>> "$fail_file"
     ) &
     pids+=($!)
     running=$((running + 1))
@@ -168,6 +174,7 @@ find "$PROJECT_QUAR" -type f -exec xattr -w com.apple.quarantine "0381;00000000;
 {
   printf 'timestamp=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   printf 'total=%s\nconcurrency=%s\nreps=%s\ncmd_timeout=%s\n' "$TOTAL" "$CONCURRENCY" "$REPS" "$CMD_TIMEOUT"
+  printf 'timeout_bin=%s\n' "$TIMEOUT_BIN"
   printf 'command_v_codex=%s\n' "$(command -v codex)"
   printf 'real_codex=%s\n' "$REAL_CODEX"
   printf 'real_codex_quarantine='
